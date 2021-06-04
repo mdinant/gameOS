@@ -160,4 +160,6 @@ IRQ0_handler:
     popfd
 
     popad
+            ; Matthijs: we do no sti because main is responsible for that in this stage
+    
     ret

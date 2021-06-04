@@ -28,7 +28,10 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 //	char hex[8];
 //	hex_to_char(p, hex);
 //	printf("ap_start: 0x%s\n", hex);
-//	anykey();
+
+	listAllTables();
+	anykey();
+
 
 	showMemory();
 

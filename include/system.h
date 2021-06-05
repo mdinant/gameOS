@@ -15,6 +15,11 @@ typedef unsigned short word;
 typedef unsigned short UInt16;
 typedef unsigned long dword;
 typedef int bool;
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long long uint64_t;
+
 
 /* This defines what the stack looks like after an ISR was running */
 
@@ -57,6 +62,9 @@ typedef struct __attribute__((packed))
 // tell compiler our int32 function is al
 // void int32(unsigned char intnum, regs16_t *regs);
 
+/* hpet */
+void testHPET();
+
 /* int32_beta */
 void int32_beta(unsigned char intnum, regs32_t *regs);
 void copy_ap_startup_code(void);
@@ -80,7 +88,8 @@ void _main();
 extern void _main_ap();
 
 /* common.c */
-bool find_string(char *string, int len, char *baseAddr, unsigned long length, char **location);
+//bool find_string(char *string, int len, char *baseAddr, unsigned long length, char **location);
+bool find_string(char *string, int len, char *baseAddr, unsigned long length, void **location);
 
 /* CONSOLE.C */
 void init_video(void);

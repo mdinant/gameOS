@@ -30,6 +30,7 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 //	printf("ap_start: 0x%s\n", hex);
 
 	listAllTables();
+		testHPET();
 	anykey();
 
 

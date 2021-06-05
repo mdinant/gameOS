@@ -59,5 +59,5 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/cpu.o $(C_DIR)/cpu.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/smp.o $(C_DIR)/smp.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
-
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
 

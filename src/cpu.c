@@ -109,10 +109,12 @@ void init_cpu() {
 	}
 	check_bsp() ? printf("we are BSP\n") : printf("we are AP\n");
 
-	if (check_rsdp_table() == FALSE) {
-		printf("Could not find/parse RSDP\n");
-		return;
-	}
+	/* TODO: implement */
+	
+	// if (check_rsdp_table() == FALSE) {
+	// 	printf("Could not find/parse RSDP\n");
+	// 	return;
+	// }
 	printf("number of processors: %u\n", smp.numberOfProcessors);
 	if (smp.numberOfProcessors <= 1) {
 		printf("only 1 processor detected\n");

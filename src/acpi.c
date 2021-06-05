@@ -3,17 +3,7 @@
 #include <apic.h>
 #include <smp.h>
 
-
-
 extern smp_t smp;
-static char *supportedTables[7] = {RSDP_NAME,
-								  RSDT_NAME,
-								  XSDT_NAME,
-								  FADT_NAME,
-								  MADT_NAME,
-								  HPET_NAME,
-								  ""};
-
 
 static bool RSDPTableParser(void *tableAddr);
 static bool XSDTTableParser(void *tableAddr);
@@ -21,34 +11,58 @@ static bool RSDTTableParser(void *tableAddr);
 static bool FADTTableParser(void *tableAddr);
 static bool MADTTableParser(void *tableAddr);
 static bool HPETTableParser(void *tableAddr);
+static bool SSDTTableParser(void *tableAddr);
 
+#define NUMBER_SUPPORTED_TABLES 7
+static ACPITable supportedTables[NUMBER_SUPPORTED_TABLES] = {
+	{RSDP_SIGNATURE, 0L, FALSE, &RSDPTableParser},
+	{RSDT_SIGNATURE, 0L, FALSE, &RSDTTableParser},
+	{XSDT_SIGNATURE, 0L, FALSE, &XSDTTableParser},
+	{FADT_SIGNATURE, 0L, FALSE, &FADTTableParser},
+	{MADT_SIGNATURE, 0L, FALSE, &MADTTableParser},
+	{HPET_SIGNATURE, 0L, FALSE, &HPETTableParser},
+	{SSDT_SIGNATURE, 0L, FALSE, &SSDTTableParser}};
 
 static bool (*tableParser)(void *);
 
+static void verifyTable(char *name, uint32_t address)
+{
+	for (int i = 0; i < NUMBER_SUPPORTED_TABLES; i++)
+	{
+		if (strncmp(name, supportedTables[i].name, MAX_SIGNATURE_SIZE) == 0)
+		{
+			printf("\nVERIFIED %s\n", supportedTables[i].name);
+			supportedTables[i].address = address;
+			supportedTables[i].verified = TRUE;
+		}
+	}
+}
 
-static ACPITableParser tableParserList[6] = {
-	{RSDP_NAME, &RSDPTableParser},
-	{XSDT_SIGNATURE, &XSDTTableParser},
-	{RSDT_SIGNATURE, &RSDTTableParser},
-	{FADT_SIGNATURE, &FADTTableParser},
-	{MADT_SIGNATURE, &MADTTableParser},
-	{HPET_SIGNATURE, &HPETTableParser}
-};
-
+bool getACPITableAddr(char *name, uint32_t * addrOut)
+{
+	for (int i = 0; i < NUMBER_SUPPORTED_TABLES; i++)
+	{
+		if (strncmp(name, supportedTables[i].name, 4) == 0)
+		{
+			if (supportedTables[i].verified)
+			{
+				*addrOut = supportedTables[i].address;
+				return TRUE;
+			}
+		}
+	}
+	return FALSE;
+}
 static bool findTableParser(char *name, bool (**parserFnc)(void *))
 {
 
-	ACPITableParser *ptr = tableParserList;
-	ACPITableParser *endPtr = tableParserList + sizeof(tableParserList) / sizeof(tableParserList[0]);
-	while (ptr < endPtr)
+	for (int i = 0; i < NUMBER_SUPPORTED_TABLES; i++)
 	{
-		if (strncmp(name, ptr->name, 4) == 0)
-//		if (strcmp(name, ptr->name) == 0)	// name (should be) 0 terminated
+		if (strncmp(name, supportedTables[i].name, 4) == 0)
 		{
-			*parserFnc = ptr->parserFnc;
+			*parserFnc = supportedTables[i].parserFnc;
 			return TRUE;
 		}
-		ptr++;
 	}
 
 	return FALSE;
@@ -78,15 +92,6 @@ static bool MADTTableParser(void *tableAddr)
 {
 
 	MADT *madtTable = (MADT *)tableAddr;
-
-	char hex[8];
-	memset(hex, 0, 8);
-	hex_to_char(madtTable->LocalControllerAddress, hex);
-
-	printf("LocalControllerAddress hex: 0x%s\n", hex);
-
-	smp.localApicAddress = madtTable->LocalControllerAddress;
-
 	if (doChecksum((char *)madtTable, madtTable->Header.Length) == FALSE)
 	{
 
@@ -94,6 +99,15 @@ static bool MADTTableParser(void *tableAddr)
 
 		return FALSE;
 	}
+
+	verifyTable(MADT_SIGNATURE, (uint32_t)(tableAddr));
+
+	char hex[8];
+	memset(hex, 0, 8);
+	hex_to_char(madtTable->LocalControllerAddress, hex);
+
+	printf("LocalControllerAddress hex: 0x%s\n", hex);
+
 	MADTRecord *madtRecord = (MADTRecord *)((char *)(madtTable) + sizeof(MADT));
 
 	// parsen maar
@@ -110,20 +124,6 @@ static bool MADTTableParser(void *tableAddr)
 		{
 
 			MADTEntryTypePLA *madtEntryTypePla = (MADTEntryTypePLA *)recordData;
-
-			// copy into our own list with bounds check
-			if (smp.numberOfProcessors < MAX_CPU)
-			{
-				//memcpy(&madtEntryTypePLAList[madtEntryTypePLAListSize++], recordData, sizeof(MADTEntryTypePLA));
-
-				smp.processorList[smp.numberOfProcessors].ApicId = madtEntryTypePla->ApicId;
-				smp.numberOfProcessors++;
-			}
-			else
-			{
-				printf("cannot add processor, max reached\n");
-			}
-
 			printf("acpi processor id: %u\tapic id: %u\tflags: %u\n", madtEntryTypePla->AcpiProcessorId, madtEntryTypePla->ApicId, madtEntryTypePla->Flags);
 			break;
 		}
@@ -168,162 +168,26 @@ static bool MADTTableParser(void *tableAddr)
 	return TRUE;
 }
 
-// old table
-static bool findTableRSDT(ACPI_SDT_32 *rsdt, char *tableName, void **location)
+
+static bool SSDTTableParser(void *tableAddr)
 {
 
-	int entryCount = (rsdt->Header.Length - sizeof(rsdt->Header)) / 4;
-
-	unsigned long *addr = &rsdt->ListAddr;
-
-	int i;
-	for (i = 0; i < entryCount; i++)
-	{
-		ACPISDTHeader *header = (ACPISDTHeader *)(*addr);
-
-		if (strncmp(tableName, header->Signature, 4) == 0)
-		{
-			//printf("found madt\n");
-			*location = (void *)header;
-
-			return TRUE;
-		}
-
-		addr++;
-	}
-	return FALSE;
-}
-
-// new table
-static bool findTableXSDT(ACPI_SDT_64 *xsdt, char *tableName, void **location)
-{
-
-	int entryCount = (xsdt->Header.Length - sizeof(xsdt->Header)) / 8;
-
-	unsigned long long *addr = &xsdt->ListAddr;
-
-	int i;
-	for (i = 0; i < entryCount; i++)
-	{
-		ACPISDTHeader *header = (ACPISDTHeader *)(unsigned long)(*addr);
-
-		if (strncmp(tableName, header->Signature, 4) == 0)
-		{
-			//printf("found madt\n");
-			*location = (void *)header;
-
-			return TRUE;
-		}
-
-		addr++;
-	}
-	return FALSE;
-}
-
-static bool parse_rsdp_table(void *tableAddr)
-{
-
-	RSDPDescriptor20 *rsdpDescriptor20 = (RSDPDescriptor20 *)tableAddr;
-
-	// check version
-	printf("rsdp version: %u\n", rsdpDescriptor20->FirstPart.Revision);
-
-	if (doChecksum((char *)&rsdpDescriptor20->FirstPart,
-				   sizeof(rsdpDescriptor20->FirstPart)) == FALSE)
-	{
-		printf("checksum failed for 1.0\n");
-
-		return FALSE;
-	}
-
-	if ((rsdpDescriptor20->FirstPart.Revision > 1) && (doChecksum((char *)&rsdpDescriptor20->Length, 16) == FALSE))
-	{
-		printf("checksum failed for 2.0\n");
-
-		return FALSE;
-	}
-
-	void *location;
-	if (rsdpDescriptor20->FirstPart.Revision > 1)
-	{
-
-		ACPISDTHeader *acpiSdtHeader =
-			(ACPISDTHeader *)(unsigned long)rsdpDescriptor20->XsdtAddress;
-		if (strncmp(XSDT_SIGNATURE, acpiSdtHeader->Signature, 4) != 0)
-		{
-			printf("%s signature check failed\n", XSDT_SIGNATURE);
-			return FALSE;
-		}
-
-		if (doChecksum((char *)acpiSdtHeader, acpiSdtHeader->Length) == FALSE)
-		{
-			printf("checksum failed for xsdt header\n");
-
-			return FALSE;
-		}
-
-		if (findTableXSDT((ACPI_SDT_64 *)acpiSdtHeader, MADT_SIGNATURE, &location) == FALSE)
-		{
-			printf("could not find MADT tABLE\n");
-			return FALSE;
-		}
-	}
-	else
-	{
-		ACPISDTHeader *acpiSdtHeader = (ACPISDTHeader *)rsdpDescriptor20->FirstPart.RsdtAddress;
-		if (strncmp(RSDT_SIGNATURE, acpiSdtHeader->Signature, 4) != 0)
-		{
-			printf("%s signature check failed\n", RSDT_SIGNATURE);
-			return FALSE;
-		}
-
-		if (doChecksum((char *)acpiSdtHeader, acpiSdtHeader->Length) == FALSE)
-		{
-			printf("checksum failed for rsdt header\n");
-
-			return FALSE;
-		}
-
-		if (findTableRSDT((ACPI_SDT_32 *)acpiSdtHeader, MADT_SIGNATURE, &location) == FALSE)
-		{
-			printf("could not find MADT tABLe\n");
-			return FALSE;
-		}
-	}
-
-	// location is madt
-
-	return MADTTableParser(location);
-}
-
-bool check_rsdp_table()
-{
-	char hex[8];
-	char *location;
-
-	bool found = (find_string(RSDP_SIGNATURE, 8, (char *)LAST_KB_640, KB,
-							  &location) ||
-				  find_string(RSDP_SIGNATURE, 8, (char *)BIOS_ROM_START,
-							  (BIOS_ROM_END - BIOS_ROM_START), &location));
-
-	if (found == TRUE)
-	{
-		hex_to_char((long)location, hex);
-		printf("rsdp table found at: %s\n", hex);
-		printf("str: %s\n", location);
-
-		return parse_rsdp_table(location);
-	}
-
+	printf("to be implemented\n");
 	return FALSE;
 }
 
 static bool HPETTableParser(void *tableAddr)
 {
 
-	printf("to be implemented\n");
-	return FALSE;
+	HPET *hpetTable = (HPET *)tableAddr;
 
+	if (doChecksum(tableAddr, hpetTable->Header.Length) == FALSE)
+	{
+		perror("checksum failed for hpet\n");
+		return FALSE;
+	}
+	verifyTable(HPET_SIGNATURE, (uint32_t)(tableAddr));
+	return TRUE;
 }
 
 static bool FADTTableParser(void *tableAddr)
@@ -331,12 +195,11 @@ static bool FADTTableParser(void *tableAddr)
 
 	printf("to be implemented\n");
 	return FALSE;
-
 }
 
 static bool RSDTTableParser(void *tableAddr)
 {
-	ACPI_SDT_32 *rsdt = (ACPI_SDT_32*)(tableAddr);
+	ACPI_SDT_32 *rsdt = (ACPI_SDT_32 *)(tableAddr);
 
 	int entryCount = (rsdt->Header.Length - sizeof(rsdt->Header)) / 4;
 
@@ -356,6 +219,7 @@ static bool RSDTTableParser(void *tableAddr)
 		tableParser((ACPI_SDT_32 *)header);
 		addr++;
 	}
+	verifyTable(RSDT_SIGNATURE, (uint32_t)(tableAddr));
 	return TRUE;
 }
 
@@ -363,7 +227,7 @@ static bool RSDTTableParser(void *tableAddr)
 static bool XSDTTableParser(void *tableAddr)
 {
 
-	ACPI_SDT_64 * xsdt = (ACPI_SDT_64*)(tableAddr);
+	ACPI_SDT_64 *xsdt = (ACPI_SDT_64 *)(tableAddr);
 
 	int entryCount = (xsdt->Header.Length - sizeof(xsdt->Header)) / 8;
 
@@ -372,18 +236,20 @@ static bool XSDTTableParser(void *tableAddr)
 	int i;
 	for (i = 0; i < entryCount; i++)
 	{
-		ACPISDTHeader *header = (ACPISDTHeader *)(unsigned long)(*addr);
+		// assumes address is < 4GB
+		ACPISDTHeader *header = (ACPISDTHeader *)(unsigned long)(*addr); // get rightmost 32 bits from 64, we are assuming < 4GB
 		printTableName(header->Signature);
 		printf(" found\n");
-		// if (strncmp(tableName, header->Signature, 4) == 0)
-		// {
-		// 	//printf("found madt\n");
-		// 	*location = (void *)header;
-
-		// }
+		if (findTableParser(header->Signature, &tableParser) == FALSE)
+		{
+			perror("parser not found\n");
+			return FALSE;
+		}
+		tableParser((ACPI_SDT_32 *)header);
 
 		addr++;
 	}
+	verifyTable(XSDT_SIGNATURE, (uint32_t)(tableAddr));
 	return TRUE;
 }
 
@@ -391,29 +257,21 @@ static bool RSDPTableParser(void *tableAddr)
 {
 	RSDPDescriptor20 *rsdpDescriptor20 = (RSDPDescriptor20 *)tableAddr;
 
-	// check version
+	if ((doChecksum((char *)&rsdpDescriptor20->FirstPart,
+					sizeof(rsdpDescriptor20->FirstPart)) == FALSE) ||
+		((rsdpDescriptor20->FirstPart.Revision > 1) && (doChecksum((char *)&rsdpDescriptor20->Length, 16) == FALSE)))
+	{
+		perror("bad RSDP\n");
+		return FALSE;
+	}
 	printf("\tRSDP version: %u\n", rsdpDescriptor20->FirstPart.Revision);
 
-	if (doChecksum((char *)&rsdpDescriptor20->FirstPart,
-				   sizeof(rsdpDescriptor20->FirstPart)) == FALSE)
-	{
-		printf("checksum failed for 1.0\n");
-
-		return FALSE;
-	}
-
-	if ((rsdpDescriptor20->FirstPart.Revision > 1) && (doChecksum((char *)&rsdpDescriptor20->Length, 16) == FALSE))
-	{
-		printf("checksum failed for 2.0\n");
-
-		return FALSE;
-	}
-
-	//void *location;
+	//	void *location;
+	ACPISDTHeader *acpiSdtHeader;
 	if (rsdpDescriptor20->FirstPart.Revision > 1)
 	{
 
-		ACPISDTHeader *acpiSdtHeader =
+		acpiSdtHeader =
 			(ACPISDTHeader *)(unsigned long)rsdpDescriptor20->XsdtAddress;
 		if (strncmp(XSDT_SIGNATURE, acpiSdtHeader->Signature, 4) != 0)
 		{
@@ -429,22 +287,16 @@ static bool RSDPTableParser(void *tableAddr)
 		}
 
 		printf("XSTD found\n");
-		if (findTableParser(XSDT_NAME, &tableParser) == FALSE)
+		if (findTableParser(XSDT_SIGNATURE, &tableParser) == FALSE)
 		{
 			perror("XSTD parser not found\n");
 			return FALSE;
 		}
-		return tableParser((ACPI_SDT_64 *)acpiSdtHeader);
-
-		// if (findTableXSDT((XSDT *)acpiSdtHeader, MADT_SIGNATURE, &location) == FALSE)
-		// {
-		// 	printf("could not find MADT tABLE\n");
-		// 	return FALSE;
-		// }
+		//return tableParser((ACPI_SDT_64 *)acpiSdtHeader);
 	}
 	else
 	{
-		ACPISDTHeader *acpiSdtHeader = (ACPISDTHeader *)rsdpDescriptor20->FirstPart.RsdtAddress;
+		acpiSdtHeader = (ACPISDTHeader *)rsdpDescriptor20->FirstPart.RsdtAddress;
 		if (strncmp(RSDT_SIGNATURE, acpiSdtHeader->Signature, 4) != 0)
 		{
 			printf("%s signature check failed\n", RSDT_SIGNATURE);
@@ -459,39 +311,22 @@ static bool RSDPTableParser(void *tableAddr)
 		}
 		printf("RSDT found\n");
 
-
-		if (findTableParser(RSDT_NAME, &tableParser) == FALSE)
+		if (findTableParser(RSDT_SIGNATURE, &tableParser) == FALSE)
 		{
 			perror("RSDT parser not found\n");
 			return FALSE;
 		}
-		return tableParser((ACPI_SDT_32 *)acpiSdtHeader);
-
-		// if (findTableRSDT((RSDT *)acpiSdtHeader, MADT_SIGNATURE, &location) == FALSE)
-		// {
-		// 	printf("could not find MADT tABLe\n");
-		// 	return FALSE;
-		// }
+		//return tableParser((ACPI_SDT_32 *)acpiSdtHeader);
 	}
 
-	// location is madt
-
-	//return parseMADTTable(location);
+	verifyTable(RSDP_SIGNATURE, (uint32_t)(tableAddr));
+	return tableParser((ACPI_SDT_32 *)acpiSdtHeader);
 }
 
-void listAllTables()
+static bool startParser()
 {
-	printf("Supported Tables:\n");
 
-	char **n = supportedTables;
-	while (strcmp(*n, "") != 0)
-	{
-		printf("%s\n", *n++);
-	}
-
-	char hex[8];
-	char *location;
-
+	void *location;
 	bool rsdpFound = (find_string(RSDP_SIGNATURE, 8, (char *)LAST_KB_640, KB,
 								  &location) ||
 					  find_string(RSDP_SIGNATURE, 8, (char *)BIOS_ROM_START,
@@ -500,17 +335,35 @@ void listAllTables()
 	if (rsdpFound == FALSE)
 	{
 		perror("RSDP not found\n");
-		return;
+		return FALSE;
 	}
 
-	hex_to_char((long)location, hex);
-	printf("RSDP found at: %s\n", hex);
+	char hex[8];
 
-	if (findTableParser(RSDP_NAME, &tableParser) == FALSE)
+	hex_to_char((uint32_t)location, hex);
+	printf("RSDP found at: %s\n", hex);
+	if (findTableParser(RSDP_SIGNATURE, &tableParser) == FALSE)
 	{
 		perror("RSDP parser not found\n");
-		return;
+		return FALSE;
 	}
-	tableParser(location);
+	return tableParser(location);
+}
 
+void listAllTables()
+{
+	//bool ret = TRUE;
+
+	if (startParser() == FALSE)
+	{
+		perror("Bad parsing\n");
+	}
+
+	//printf("Supported Tables:\n");
+
+	// char **n = supportedTables;
+	// while (strcmp(*n, "") != 0)
+	// {
+	// 	printf("%s\n", *n++);
+	// }
 }

@@ -63,7 +63,7 @@ typedef struct __attribute__((packed))
 // void int32(unsigned char intnum, regs16_t *regs);
 
 /* hpet */
-void testHPET();
+//void testHPET();
 
 /* int32_beta */
 void int32_beta(unsigned char intnum, regs32_t *regs);
@@ -99,6 +99,7 @@ void cls();
 int printf(const char *format, ...);
 int perror(const char *format, ...);
 
+/* scrn.c */
 void anykey();
 
 /* VGA.c */
@@ -137,6 +138,7 @@ void IRQ0_handler(void);
 void sleep(unsigned long delay);
 void timer_wait(int ticks);
 void timer_install();
+uint64_t getTicks();
 
 /* KEYBOARD.C */
 void keyboard_install();

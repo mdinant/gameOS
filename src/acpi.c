@@ -31,7 +31,6 @@ static void verifyTable(char *name, uint32_t address)
 	{
 		if (strncmp(name, supportedTables[i].name, MAX_SIGNATURE_SIZE) == 0)
 		{
-			printf("\nVERIFIED %s\n", supportedTables[i].name);
 			supportedTables[i].address = address;
 			supportedTables[i].verified = TRUE;
 		}

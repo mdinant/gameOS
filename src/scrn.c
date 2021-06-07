@@ -405,8 +405,7 @@ int perror(const char *format, ...)
 
 void anykey()
 {
-	regs32_t regs;
-	regs.eax = 0x0;
-
-	int32_beta(0x16, &regs);
+//	regs32_t regs;
+//	regs.eax = 0x0;
+//	int32_beta(0x16, &regs);
 }

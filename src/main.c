@@ -18,32 +18,26 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 	irq_install();
 	init_video();
 	timer_install();
-	init_mouse();
+//init_mouse();
 	keyboard_install();
 	
+
 	__asm__ __volatile__ ("sti");
 
-//	unsigned int p = (int)&_ap_start;
-//
-//	char hex[8];
-//	hex_to_char(p, hex);
-//	printf("ap_start: 0x%s\n", hex);
-
 	listAllTables();
-		testHPET();
+//		testHPET();
 	anykey();
 
 
 	showMemory();
 
 
-	init_cpu();
+//	init_cpu();
 	printf("\n\nOK echt");
 
-	init_vbe();
+//	init_vbe();
 
 
-//	_main_ap();
 	
 	for (;;); // or halt
 }

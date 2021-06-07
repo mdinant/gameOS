@@ -1,11 +1,11 @@
-#define MAX_SIGNATURE_SIZE  10
-#define RSDP_SIGNATURE      "RSD PTR "
-#define RSDT_SIGNATURE      "RSDT"
-#define XSDT_SIGNATURE      "XSDT"
-#define FADT_SIGNATURE      "FACP"
-#define MADT_SIGNATURE      "APIC"
-#define HPET_SIGNATURE      "HPET"
-#define SSDT_SIGNATURE      "SSDT"
+#define MAX_SIGNATURE_SIZE 10
+#define RSDP_SIGNATURE "RSD PTR "
+#define RSDT_SIGNATURE "RSDT"
+#define XSDT_SIGNATURE "XSDT"
+#define FADT_SIGNATURE "FACP"
+#define MADT_SIGNATURE "APIC"
+#define HPET_SIGNATURE "HPET"
+#define SSDT_SIGNATURE "SSDT"
 
 #define MET_PROCESSOR_LOCAL_APIC 0
 #define MET_IO_APIC 1
@@ -13,15 +13,14 @@
 #define MET_NON_MASKABLE_INTERRUPT 4
 #define MET_LOCAL_APIC_ADDRESS_OVERRIDE 5
 
-typedef struct 
+typedef struct
 {
     uint8_t AddressSpaceId;
     uint8_t RegisterBitWith;
     uint8_t RegisterBitOffset;
     uint8_t Reserved;
     uint64_t Address;
-}__attribute__((packed)) ACPIAddressFormat;
-
+} __attribute__((packed)) ACPIAddressFormat;
 
 typedef struct
 {
@@ -35,7 +34,6 @@ typedef struct
     unsigned long CreatorID;
     unsigned long CreatorRevision;
 } __attribute__((packed)) ACPISDTHeader;
-
 
 typedef struct
 {
@@ -75,15 +73,15 @@ typedef struct
 {
     ACPISDTHeader Header;
     uint8_t HardwareRevId;
-    uint8_t NumComparators:5;
-    uint8_t CountSizeCap;
-    uint8_t Reserved;
-    uint8_t IRQRoutingTable;
+    uint8_t NumComparators : 5;
+    uint8_t CountSizeCap : 1;
+    uint8_t Reserved : 1;
+    uint8_t IRQRoutingTable : 1;
     uint16_t PCIVenderId;
     ACPIAddressFormat BaseAddress;
-    unsigned char HpetNumber;
-    unsigned short MCounterMinimumCT;   // in periodic mode
-    unsigned char PageProtection;
+    uint8_t HpetNumber;
+    uint16_t MCounterMinimumCT; // in periodic mode
+    uint8_t PageProtection;
 } __attribute__((packed)) HPET;
 
 typedef struct
@@ -146,8 +144,6 @@ typedef struct
     bool (*parserFnc)(void *);
 } __attribute__((packed)) ACPITable;
 
-
-
 bool doChecksum(char *table, size_t length);
 
-bool getACPITableAddr(char *name, uint32_t * addrOut);
+bool getACPITableAddr(char *name, uint32_t *addrOut);

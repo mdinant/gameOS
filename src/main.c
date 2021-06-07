@@ -5,38 +5,51 @@
  *  Notes: No warranty expressed or implied. Use at own risk. */
 #include <system.h>
 #include <multiboot.h>
+#include <smp.h>
+#include <apic.h>
 
 
-
+extern smp_t smp;
 
 void _main(multiboot_info_t *mbt, unsigned long magic)
 {
-	
+	initSMP();
+
 	gdt_install();
-	idt_install();
-	isrs_install();
-	irq_install();
-	init_video();
+	idt_install(smp.processorList[0].idt, &smp.processorList[0].idtp);
+	isrs_install(smp.processorList[0].idt);
+	irq_remap();
+	irq_install(smp.processorList[0].idt);
 	timer_install();
-//init_mouse();
+	init_mouse();
 	keyboard_install();
-	
+	init_video();
 
+
+	detect_cpu();
+	bool systemReady = check_cpu();
+	if (systemReady == FALSE) {
+
+		printf("Can not operate on this system\n");
+		return;
+	}
+	apic_irq_install(smp.processorList[0].idt);
 	__asm__ __volatile__ ("sti");
-
+	
 	listAllTables();
-//		testHPET();
-	anykey();
+	//showMemory();
 
 
-	showMemory();
+
+	//init_cpu();
+
+	//if (init_vbe() == FALSE) {
+	//	return;
+	//}
 
 
-//	init_cpu();
-	printf("\n\nOK echt");
 
-//	init_vbe();
-
+//	demoVBE();
 
 	
 	for (;;); // or halt

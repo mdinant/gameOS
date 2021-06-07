@@ -39,6 +39,8 @@ asm:
 	nasm -f elf32 $(ASM_DIR)/stack.asm -o $(OBJ_DIR)/stack.o
 	nasm -f elf32 $(ASM_DIR)/pit.asm -o $(OBJ_DIR)/pit.o
 	nasm -f elf32 $(ASM_DIR)/pic.asm -o $(OBJ_DIR)/pic.o
+	nasm -f elf32 $(ASM_DIR)/gdt.asm -o $(OBJ_DIR)/gdt_asm.o
+
 c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main.o $(C_DIR)/main.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main_ap.o $(C_DIR)/main_ap.c
@@ -58,6 +60,7 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/cpudet.o $(C_DIR)/cpudet.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/cpu.o $(C_DIR)/cpu.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/smp.o $(C_DIR)/smp.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/apic.o $(C_DIR)/apic.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
 

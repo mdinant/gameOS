@@ -1,78 +1,46 @@
-
 [BITS 32]
 global start
-extern _ap_gdt_pointer
+
 extern end_stack
+extern _ap_stack
+extern _main_ap
+global _get_esp
+global _tramp
 
 start:
     mov esp, end_stack     ; This points the stack to our new stack area
     jmp stublet
 
-
-    
-    ;EXTERN code, bss, end
-
-    ; Multiboot macros to make a few lines later more readable
-    ;MULTIBOOT_PAGE_ALIGN	equ 1<<0
-    ;MULTIBOOT_MEMORY_INFO	equ 1<<1
-    ;MULTIBOOT_AOUT_KLUDGE	equ 1<<16
-    ;MULTIBOOT_HEADER_MAGIC	equ 0x1BADB002
-    ;MULTIBOOT_HEADER_FLAGS	equ MULTIBOOT_PAGE_ALIGN | MULTIBOOT_MEMORY_INFO | MULTIBOOT_AOUT_KLUDGE
-    ;MULTIBOOT_CHECKSUM	equ -(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS)
-
-
-    ; This is the GRUB Multiboot header. A boot signature
-    ;dd MULTIBOOT_HEADER_MAGIC
-    ;dd MULTIBOOT_HEADER_FLAGS
-    ;dd MULTIBOOT_CHECKSUM
-
-    ; AOUT kludge - must be physical addresses. Make a note of these:
-    ; The linker script fills in the data for these ones!
-    ;dd mboot
-    ;dd code
-    ;dd bss
-    ;dd end
-    ;dd start
-
-    ;EXTERN code, bss, end
-
-
-
 ; This is an endless loop here. Make a note of this: Later on, we
 ; will insert an 'extern _main', followed by 'call _main', right
 ; before the 'jmp $'.
 stublet:
-	push ebx
-    push eax
+	;push ebx
+    ;push eax
+    ;mov ebp, dword 1
     extern _main
     call _main
     jmp $
 
-; This will set up our new segment registers. We need to do
-; something special in order to set CS. We do what is called a
-; far jump. A jump that includes a segment as well as an offset.
-; This is declared in C as 'extern void gdt_flush();'
-global gdt_flush
-extern gp
-gdt_flush:
-    lgdt [gp]
-    mov ax, 0x10
-    mov ds, ax
-    mov es, ax
-    mov fs, ax
-    mov gs, ax
-    mov ss, ax
-    jmp 0x08:flush2
-flush2:
-	sgdt [_ap_gdt_pointer]
-    ret
+_get_esp:
+	mov eax, esp
+	ret
+
+;_tramp:
+;	mov esp, [_ap_stack]
+;	call _main_ap
+;	hlt
 
 ; Loads the IDT defined in '_idtp' into the processor.
 ; This is declared in C as 'extern void idt_load();'
 global idt_load
-extern idtp
+;extern idtp
 idt_load:
-    lidt [idtp]
+    ;lidt [idtp]
+
+    mov eax, [esp+4]
+    lidt [eax]
+
     ret
 
 ; In just a few pages in this tutorial, we will add our Interrupt
@@ -376,6 +344,9 @@ global irq12
 global irq13
 global irq14
 global irq15
+global irq48
+global irq49
+global irq255
 
 ; 32: IRQ0
 irq0:
@@ -429,6 +400,13 @@ irq6:
 ; 39: IRQ7
 irq7:
     cli
+; check spurious
+	mov al, 0x0B
+	out 0x20, al
+	in al, 0x20           ;al = master PIC's "In Service Register"
+	test eax, 1<<7
+	jz spurious
+
     push byte 0
     push byte 39
     jmp irq_common_stub
@@ -485,11 +463,46 @@ irq14:
 ; 47: IRQ15
 irq15:
     cli
+; check spurious
+	mov al, 0x0B
+	out 0xA0, al
+	in al, 0xA0           ;al = slave "In Service Register"
+	test eax, 1<<7
+	jz spurious
+
     push byte 0
     push byte 47
     jmp irq_common_stub
 
-extern irq_handler
+spurious:
+
+	sti
+	iret
+
+
+; 48: IRQ48 APIC
+irq48:
+	cli
+    push byte 0
+    push byte 48
+    jmp apic_irq_common_stub
+
+irq49:
+	cli
+    push byte 0
+    push byte 49
+    jmp apic_irq_common_stub
+
+; apic spurious, ignore
+irq255:
+    ;push eax
+    ;mov eax, cls
+    ;call eax
+    ;pop eax
+	iret
+
+extern pic_irq_handler
+extern apic_irq_handler
 
 irq_common_stub:
     pusha
@@ -506,7 +519,7 @@ irq_common_stub:
     mov eax, esp
 
     push eax
-    mov eax, irq_handler
+    mov eax, pic_irq_handler
     call eax
     pop eax
 
@@ -519,7 +532,39 @@ irq_common_stub:
     sti
     iret
     
-    
-    
+   ; extern test_func_c
 
+apic_irq_common_stub:
+    ;push eax
+    ;mov eax, cls
+    ;call eax
+    ;pop eax
+    ;add esp, 8
+    ;sti
+    ;iret
+    pusha
+    push ds
+    push es
+    push fs
+    push gs
 
+    mov ax, 0x10
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov eax, esp
+
+    push eax
+    mov eax, apic_irq_handler
+    call eax
+    pop eax
+    pop gs
+    pop fs
+    pop es
+    pop ds
+    popa
+    add esp, 8
+    sti
+
+    iret

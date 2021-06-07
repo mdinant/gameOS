@@ -1,11 +1,10 @@
-
 ; code is copied so labels are invalid, use this to fix them
 %define REBASE(x) (((x) - startup) + _ap_boot_addr)
 
 
 
 extern _ap_boot_addr						; where this code starts at
-
+extern _tramp
 extern _main_ap								; c func to call when all is ok
 
 
@@ -17,6 +16,8 @@ global _running_flag						; to inform bsp
 
 global _ap_boot_start						; to be copied to RM friendly address by bsp
 global _ap_boot_end
+
+
 
 SECTION .text
 
@@ -44,13 +45,18 @@ protected_start: use32
 	mov  ss, ax					; reset ss selector
 
 
-	mov esp, _ap_stack			; set stack
-	;mov eax, [_running_flag]
-	;inc eax
-	mov eax, 1
-	mov [_running_flag], eax	; inform bsp we are running
+	mov esp, [_ap_stack]			; set stack
+	;mov eax, 1
+	;push byte 1
+	mov ebp, dword [_running_flag]
+	mov eax, dword [_running_flag]
+	mov [esp], eax
+	sub esp, 4
 
-	jmp dword 0x08:_main_ap	; NOTE: why do we still need to do a far jump?
+
+	;jmp dword 0x08:_main_ap		; NOTE: why do we still need to do a far jump?
+	jmp dword 0x08:_main_ap
+	;jmp dword 0x08:_tramp
 	hlt
 
 _ap_gdt_pointer: 				; placeholder, filled in by bsp in early stage. Called in RM so needs to be inside copied code
@@ -61,11 +67,9 @@ _ap_boot_end:
 
 
 
-_ap_stack:
-	dd 0x0						; top of stack address, to be filled in by bsp
+;_ap_stack:
+;	dd 0x0						; top of stack address, to be filled in by bsp
 
 SECTION .data
 	_running_flag dd 0x0		; init to 0 for bsp
-
-
-
+	_ap_stack dd 0x0

@@ -18,6 +18,7 @@ SECTIONS
     .text : {
     	code = .;      
         start.o(.text)
+		gdt_asm.o(.text)
 		int32_beta.o(.text)
 	 	cpuid.o(.text) 
 	 	pic.o(.text)
@@ -40,6 +41,7 @@ SECTIONS
 	 	cpudet.o(.text) 
 	 	cpu.o(.text) 
 	 	smp.o(.text) 
+		apic.o(.text) 
 	 	acpi.o(.text)
 		 hpet.o(.text)
         _boot_end = .;

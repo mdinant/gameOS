@@ -121,8 +121,25 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
 void gdt_install();
 
 /* IDT.C */
-void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags);
-void idt_install();
+
+/* Defines an IDT entry */
+struct idt_entry
+{
+    unsigned short base_lo;
+    unsigned short sel;
+    unsigned char always0;
+    unsigned char flags;
+    unsigned short base_hi;
+} __attribute__((packed));
+
+struct idt_ptr
+{
+    unsigned short limit;
+    unsigned int base;
+} __attribute__((packed));
+
+void idt_set_gate(struct idt_entry * idt, unsigned char num, unsigned long base, unsigned short sel, unsigned char flags);
+void idt_install(struct idt_entry * idt, struct idt_ptr * idtp);
 
 /* ISRS.C */
 void isrs_install();
@@ -130,7 +147,8 @@ void isrs_install();
 /* IRQ.C */
 void irq_install_handler(int irq, void (*handler)(struct regs *r));
 void irq_uninstall_handler(int irq);
-void irq_install();
+void irq_install(struct idt_entry * idt);
+void irq_remap(void);
 
 /* TIMER.C */
 void init_PIT(void);
@@ -172,7 +190,7 @@ void showMemory();
 void enable_apic(void);
 void cpu_get_msr(unsigned int msr, unsigned int *lo, unsigned int *hi);
 void cpu_set_msr(unsigned int msr, unsigned int lo, unsigned int hi);
-
+bool check_cpu();
 /* mptable.c */
 bool check_mp_table();
 

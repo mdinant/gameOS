@@ -7,7 +7,7 @@
 
 /* This will keep track of how many ticks that the system
 *  has been running for */
-int timer_ticks = 0;
+uint64_t timer_ticks = 0;
 
 extern unsigned long system_timer_fractions;
 extern unsigned long system_timer_ms;
@@ -30,13 +30,13 @@ void timer_handler(struct regs *r)
 {
     /* Increment our 'tick count' */
     timer_ticks++;
-    IRQ0_handler();
-    /* Every 18 clocks (approximately 1 second), we will
-    *  display a message on the screen */
-//   if (timer_ticks % 100 == 0)
-//    {
-//        printf("One second has passed, ms: %u\n", system_timer_ms);
-//    }
+    //printf("ticks: %u\n", timer_ticks);
+    //IRQ0_handler();
+}
+
+uint64_t getTicks()
+{
+    return timer_ticks;
 }
 
 /* This will continuously loop until the given time has
@@ -48,12 +48,32 @@ void timer_wait(int ticks)
     eticks = timer_ticks + ticks;
     while(timer_ticks < eticks);
 }
+static void timerInit(uint32_t frequency)
+{
 
+   // The value we send to the PIT is the value to divide it's input clock
+   // (1193180 Hz) by, to get our required frequency. Important to note is
+   // that the divisor must be small enough to fit into 16-bits.
+   uint32_t divisor = 1193180 / frequency;
+
+   // Send the command byte.
+   outportb(0x43, 0x36);
+
+   // Divisor has to be sent byte-wise, so split here into upper/lower bytes.
+   uint8_t l = (uint8_t)(divisor & 0xFF);
+   uint8_t h = (uint8_t)( (divisor>>8) & 0xFF );
+
+   // Send the frequency divisor.
+   outportb(0x40, l);
+   outportb(0x40, h);
+} 
 /* Sets up the system clock by installing the timer handler
 *  into IRQ0 */
 void timer_install()
 {
-	init_PIT();
+	//init_PIT();
     /* Installs 'timer_handler' to IRQ0 */
     irq_install_handler(0, timer_handler);
+    timerInit(50);
 }
+

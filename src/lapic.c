@@ -13,11 +13,11 @@
  *  and if the local APIC hasn't been disabled in MSRs
  *  note that this requires CPUID to be supported.
  */
-bool check_apic() {
-   unsigned int eax, edx;
-   cpuid(1, &eax, &edx);
-   return edx & CPUID_FEAT_EDX_ACPI;
-}
+// bool check_apic() {
+//    unsigned int eax, edx;
+//    cpuid(1, &eax, &edx);
+//    return edx & CPUID_FEAT_EDX_ACPI;
+// }
 
 /* Set the physical address for local APIC registers */
 void cpu_set_apic_base(unsigned int apic) {

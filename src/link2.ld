@@ -41,6 +41,7 @@ SECTIONS
 	 	cpu.o(.text) 
 	 	smp.o(.text) 
 	 	acpi.o(.text)
+		 hpet.o(.text)
         _boot_end = .;
         . = ALIGN(4096);
         _ap_start = .;

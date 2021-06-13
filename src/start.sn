@@ -1,2 +1,0 @@
-#!/bin/bash
-mount -t cifs -o user=matthijs //192.168.2.2/OS /mnt/windows

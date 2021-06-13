@@ -37,16 +37,11 @@ typedef struct {
 
 
 typedef struct {
-	unsigned long IOApicAddress;
-	unsigned int localApicAddress;
+	uint32_t IOApicAddress;
+	uint32_t localApicAddress;
 	processor_t processorList[MAX_CPU];
-	int numberOfProcessors;
+	uint32_t numberOfProcessors;
 } smp_t;
 
-
-void initSMP();
-
-
-//void releaseLock(int * lock);
-
+bool setupLapic(processor_t * processor);
 #endif

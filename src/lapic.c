@@ -39,7 +39,7 @@ unsigned int cpu_get_apic_base() {
    unsigned int eax, edx;
    cpu_get_msr(IA32_APIC_BASE_MSR, &eax, &edx);
 
-#ifdef __PHYSICAL_MEMORY_EXTENSION__
+#ifdef __PHYSICAL_MEMORY_EXTENSION__ // wtf is dit
    return (eax & 0xfffff000) | ((edx & 0x0f) << 32);
 #else
    return (eax & 0xfffff000);

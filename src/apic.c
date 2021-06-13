@@ -1,6 +1,6 @@
 #include <system.h>
-#include "apic.h"
-#include "smp.h"
+#include <apic.h>
+#include <smp.h>
 
 extern smp_t smp;
 extern void irq48();	//asm stuff first
@@ -58,3 +58,4 @@ void apic_irq_install(struct idt_entry * idt) {
 	irq_install_handler(16, apic_irq48_handler);
 	irq_install_handler(17, apic_irq49_handler);
 }
+

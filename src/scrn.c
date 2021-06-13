@@ -403,9 +403,10 @@ int perror(const char *format, ...)
 	return ret;
 }
 
+// bios disables all interrupts... puntje puntje puntje, incl timer
 void anykey()
 {
-//	regs32_t regs;
-//	regs.eax = 0x0;
-//	int32_beta(0x16, &regs);
+	regs32_t regs;
+	regs.eax = 0x0;
+	int32_beta(0x16, &regs);
 }

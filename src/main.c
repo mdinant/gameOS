@@ -8,13 +8,10 @@
 #include <smp.h>
 #include <apic.h>
 
-
 extern smp_t smp;
 
 void _main(multiboot_info_t *mbt, unsigned long magic)
 {
-	initSMP();
-
 	gdt_install();
 	idt_install(smp.processorList[0].idt, &smp.processorList[0].idtp);
 	isrs_install(smp.processorList[0].idt);
@@ -25,32 +22,34 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 	keyboard_install();
 	init_video();
 
-
 	detect_cpu();
 	bool systemReady = check_cpu();
-	if (systemReady == FALSE) {
+	if (systemReady == FALSE)
+	{
 
-		printf("Can not operate on this system\n");
-		return;
+		printf("Can not operate on this system\nNeed to shutdown, interrupts are off");
+		goto halt;
 	}
 	apic_irq_install(smp.processorList[0].idt);
-	__asm__ __volatile__ ("sti");
+	__asm__ __volatile__("sti");
 	
+	//setupLapic(&smp.processorList[0]);
+
 	listAllTables();
-	//showMemory();
-
-
+	anykey();
+	
+	showMemory();
 
 	//init_cpu();
 
-	//if (init_vbe() == FALSE) {
-	//	return;
-	//}
+	if (init_vbe() == FALSE) {
+		return;
+	}
 
+	//	demoVBE();
 
-
-//	demoVBE();
-
-	
-	for (;;); // or halt
+halt:
+	for (;;)
+		; // or halt
+		// next station is a jmp $ in asm
 }

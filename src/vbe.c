@@ -181,8 +181,11 @@ void printModesWithBBP(unsigned short bbp, vbeControllerInfo * ctrl) {
 				}
 				printf("BPS: %7u\t", inf->BytesPerScanLine);
 				printf("NoIP: %2u\t", inf->NumberOfImagePages);
-//				hex_to_char(inf->PhysBasePtr, hex);
-//				printf("physPtr: 0x%8s", hex);
+				//hex_to_char(inf->PhysBasePtr, hex);
+				//printf("physPtr: 0x%8s", hex);
+				hex_to_char(inf->OffScreenMemSize, hex);
+				printf("OMSize: 0x%s", hex);
+				//printf("OMSize: %u", inf->OffScreenMemSize);
 
 				printf("\n");
 			}
@@ -222,7 +225,7 @@ void printVbeControllerInfo(vbeControllerInfo * ctrl) {
 	while (*mode != 0xFFFF) {
 		hex_to_char(*mode, hex);
 		printf(" | 0x%s", hex);
-		mode += 2;
+		mode += sizeof(uint16_t);
 	}
 	printf("\n");
 	printf("TotalMemory (dec): %u\n", ((long) (ctrl->TotalMemory)) * 0xFFFF);
@@ -239,14 +242,17 @@ void showVesaInfo() {
 	switch (ret) {
 	case FunctionNotSupported: {
 		printf("Function Not Supported\n");
+		anykey();
 		return;
 	}
 	case FunctionCallFailed: {
 		printf("Function Call Failed\n");
+		anykey();
 		return;
 	}
 	default: {
 		printf("FunctionCallSuccessful\n");
+		anykey();
 	}
 	}
 

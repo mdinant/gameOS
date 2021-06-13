@@ -216,7 +216,7 @@ void showMemory() {
 	}
 
 	// save ebx
-	printf("number of bytes stored: %u\n", regs.ecx);
+	printf("number of bytes stored: waarom schrijf ik dit op? %u\n", regs.ecx);
 
 	//printf("BaseAddress\tLengthOfRegion\tType\n");
 	printf("%8s\t%8s\t%8s\t\n", "BaseAddrLow", "LengthOfReg", "RegionType");

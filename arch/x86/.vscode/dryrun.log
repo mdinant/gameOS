@@ -1,0 +1,63 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/matthijs/projects/os/gameOS/arch/x86'
+nasm -f elf32 ./src/multiboot_header.asm -o ./obj/multiboot_header.o
+nasm -f elf32 ./src/start.asm -o ./obj/start.o
+nasm -f elf32 ./src/int32_beta.asm -o ./obj/int32_beta.o
+nasm -f elf32 ./src/cpuid.asm -o ./obj/cpuid.o
+nasm -f elf32 ./src/memasm.asm -o ./obj/memasm.o
+nasm -f elf32 ./src/ap_boot.asm -o ./obj/ap_boot.o
+nasm -f elf32 ./src/stack.asm -o ./obj/stack.o
+nasm -f elf32 ./src/pit.asm -o ./obj/pit.o
+nasm -f elf32 ./src/pic.asm -o ./obj/pic.o
+nasm -f elf32 ./src/gdt.asm -o ./obj/gdt_asm.o
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/main.o ./src/main.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/main_ap.o ./src/main_ap.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/common.o ./src/common.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/scrn.o ./src/scrn.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/gdt.o ./src/gdt.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/idt.o ./src/idt.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/isrs.o ./src/isrs.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/irq.o ./src/irq.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/timer.o ./src/timer.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/kb.o ./src/kb.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/vga.o ./src/vga.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/math.o ./src/math.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/mouse.o ./src/mouse.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/vbe.o ./src/vbe.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/mem.o ./src/mem.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/cpudet.o ./src/cpudet.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/cpu.o ./src/cpu.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/smp.o ./src/smp.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/apic.o ./src/apic.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/acpi.o ./src/acpi.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/hpet.o ./src/hpet.c
+$HOME/opt/cross/bin/i686-elf-gcc -T ./src/link2.ld -o ./bin/kernel.bin -ffreestanding -O2 -nostdlib -lgcc
+ 
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+ 
+GNU xorriso 1.5.4.pl02 : RockRidge filesystem manipulator, libburnia project.
+
+Drive current: -outdev 'stdio:./iso/myos.iso'
+Media current: stdio file, overwriteable
+Media status : is blank
+Media summary: 0 sessions, 0 data blocks, 0 data,  359g free
+Added to ISO image: directory '/'='/tmp/grub.RUwbWJ'
+xorriso : UPDATE :     290 files added in 1 seconds
+Added to ISO image: directory '/'='/home/matthijs/projects/os/gameOS/arch/x86/iso'
+xorriso : UPDATE :     294 files added in 1 seconds
+xorriso : NOTE : Copying to System Area: 512 bytes from file '/usr/lib/grub/i386-pc/boot_hybrid.img'
+ 
+xorriso : UPDATE :  69.82% done
+ 
+ISO image produced: 2651 sectors
+Written to medium : 2651 sectors at LBA 0
+Writing to 'stdio:./iso/myos.iso' completed successfully.
+
+ 
+sudo 
+:  
+a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper 
+
+ 
+make: Leaving directory '/home/matthijs/projects/os/gameOS/arch/x86'
+ 

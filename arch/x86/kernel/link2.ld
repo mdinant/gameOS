@@ -43,7 +43,9 @@ SECTIONS
 	 	smp.o(.text) 
 		apic.o(.text) 
 	 	acpi.o(.text)
-		 hpet.o(.text)
+		hpet.o(.text)
+		pci.o(.text)
+		io.o(.text)
         _boot_end = .;
         . = ALIGN(4096);
         _ap_start = .;

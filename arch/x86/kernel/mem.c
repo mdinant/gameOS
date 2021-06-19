@@ -94,33 +94,7 @@ int strncmp(char string1[], char string2[], int n)
 
 }
 
-inline byte inportb (word _port)
-{
-	unsigned char rv;
-	__asm__ __volatile__ ("inb %1, %0" : "=a" (rv) : "dN" (_port));
-	return rv;
-}
 
-inline void outportb (word _port, byte _data)
-{
-	__asm__ __volatile__ ("outb %1, %0" : : "dN" (_port), "a" (_data));
-}
-
-inline void outportw(word _port, word _data)
-{
-	__asm__ __volatile__("outw %0, %1" : : "a" (_data), "Nd" (_port));
-
-	return;
-}
-
-inline word inportw(word _port)
-{
-	register word _data;
-
-	asm volatile("inw %1, %0" : "=a" (_data) : "Nd" (_port));
-
-	return _data;
-}
 
 
 // can be unaligned

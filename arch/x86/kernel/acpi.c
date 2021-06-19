@@ -3,6 +3,8 @@
 #include <apic.h>
 #include <smp.h>
 
+
+
 extern smp_t smp;
 
 static bool RSDPTableParser(void *tableAddr);
@@ -349,7 +351,7 @@ static bool startParser()
 	return tableParser(location);
 }
 
-void listAllTables()
+void list_all_tables()
 {
 	//bool ret = TRUE;
 

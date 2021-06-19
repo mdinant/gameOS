@@ -6,7 +6,7 @@
 #ifndef __SYSTEM_H
 #define __SYSTEM_H
 
-#include "system_def.h"
+#include <system_def.h>
 
 typedef int size_t;
 
@@ -76,6 +76,14 @@ bool check_msr(void);
 bool check_sse(void);
 bool check_bsp(void);
 
+/* io.asm */
+uint8_t _inportb_nasm(uint16_t port);
+uint16_t _inportw_nasm(uint16_t port);
+uint32_t _inportdw_nasm(uint16_t port);
+void _outportb_nasm(uint16_t port, uint8_t data);
+void _outportw_nasm(uint16_t port, uint16_t data);
+void _outportdw_nasm(uint16_t port, uint32_t data);
+
 /* cpudet.c */
 int detect_cpu(void);
 void init_cpu(void);
@@ -90,7 +98,7 @@ extern void _main_ap();
 /* common.c */
 //bool find_string(char *string, int len, char *baseAddr, unsigned long length, char **location);
 bool find_string(char *string, int len, char *baseAddr, unsigned long length, void **location);
-
+void *swapbytesout(void *inp, void *out, size_t len);
 /* CONSOLE.C */
 void init_video(void);
 void puts(char *text);
@@ -98,7 +106,12 @@ void putch(unsigned char c);
 void cls();
 int printf(const char *format, ...);
 int perror(const char *format, ...);
-
+/*
+void outportb(word _port, byte _data);
+void outportw(word _port, word _data);
+byte inportb(word _port);
+word inportw(word _port);
+*/
 /* scrn.c */
 void anykey();
 
@@ -180,10 +193,7 @@ int strncmp(char string1[], char string2[], int n);
 const void *memclr(const void *const mem, const size_t count);
 void memcpy_SSE2(void *dest, const void *src, size_t count);
 
-void outportb(word _port, byte _data);
-void outportw(word _port, word _data);
-byte inportb(word _port);
-word inportw(word _port);
+
 void showMemory();
 
 /* cpu.c */
@@ -195,8 +205,7 @@ bool check_cpu();
 bool check_mp_table();
 
 /* acpi.c */
-bool check_rsdp_table();
-void listAllTables();
+
 
 void _main_ap();
 

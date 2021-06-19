@@ -16,3 +16,10 @@
 
 #define MAX_CPU						128
 #define STACK_SIZE					0x1000
+
+#define inpb(port)          _inportb_nasm((port))
+#define inpw(port)          _inportw_nasm((port))
+#define inpdw(port)         _inportdw_nasm((port))
+#define outpb(port, data)   _outportb_nasm((port), (data))
+#define outpw(port, data)   _outportw_nasm((port), (data))
+#define outpdw(port, data)   _outportdw_nasm((port), (data))

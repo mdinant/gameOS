@@ -57,15 +57,15 @@ static void timerInit(uint32_t frequency)
    uint32_t divisor = 1193180 / frequency;
 
    // Send the command byte.
-   outportb(0x43, 0x36);
+   outpb(0x43, 0x36);
 
    // Divisor has to be sent byte-wise, so split here into upper/lower bytes.
    uint8_t l = (uint8_t)(divisor & 0xFF);
    uint8_t h = (uint8_t)( (divisor>>8) & 0xFF );
 
    // Send the frequency divisor.
-   outportb(0x40, l);
-   outportb(0x40, h);
+   outpb(0x40, l);
+   outpb(0x40, h);
 } 
 /* Sets up the system clock by installing the timer handler
 *  into IRQ0 */

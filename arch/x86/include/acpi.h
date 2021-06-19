@@ -1,3 +1,6 @@
+#ifndef __ACPI_H
+#define __ACPI_H
+
 #define MAX_SIGNATURE_SIZE 10
 #define RSDP_SIGNATURE "RSD PTR "
 #define RSDT_SIGNATURE "RSDT"
@@ -147,3 +150,8 @@ typedef struct
 bool doChecksum(char *table, size_t length);
 
 bool getACPITableAddr(char *name, uint32_t *addrOut);
+
+bool check_rsdp_table();
+
+void list_all_tables();
+#endif

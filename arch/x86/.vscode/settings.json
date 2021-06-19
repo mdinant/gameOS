@@ -1,3 +1,8 @@
 {
-    "makefile.extensionOutputFolder": "./.vscode"
+    "makefile.extensionOutputFolder": "./.vscode",
+    "files.associations": {
+        "acpi.h": "c",
+        "pci.h": "c",
+        "system.h": "c"
+    }
 }

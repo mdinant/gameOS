@@ -40,9 +40,13 @@ asm:
 	nasm -f elf32 $(ASM_DIR)/pit.asm -o $(OBJ_DIR)/pit.o
 	nasm -f elf32 $(ASM_DIR)/pic.asm -o $(OBJ_DIR)/pic.o
 	nasm -f elf32 $(ASM_DIR)/gdt.asm -o $(OBJ_DIR)/gdt_asm.o
+	nasm -f elf32 $(ASM_DIR)/io.asm -o $(OBJ_DIR)/io.o
+
+listing:
+	$(CC) $(CFLAGS) -S -o $(C_DIR)/kb.S $(C_DIR)/kb.c
 
 c:
-	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main.o $(C_DIR)/main.c
+	$(CC) $(CFLAGS) -o $(OBJ_DIR)/main.o -c $(C_DIR)/main.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main_ap.o $(C_DIR)/main_ap.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/common.o $(C_DIR)/common.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/scrn.o $(C_DIR)/scrn.c
@@ -63,4 +67,4 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/apic.o $(C_DIR)/apic.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
-
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/pci.o $(C_DIR)/pci.c

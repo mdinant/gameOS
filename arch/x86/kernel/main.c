@@ -7,6 +7,8 @@
 #include <multiboot.h>
 #include <smp.h>
 #include <apic.h>
+#include <pci.h>
+#include <acpi.h>
 
 extern smp_t smp;
 
@@ -23,7 +25,7 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 	init_video();
 
 	detect_cpu();
-	bool systemReady = check_cpu();
+	bool systemReady = check_cpu() && check_pci();
 	if (systemReady == FALSE)
 	{
 
@@ -34,9 +36,18 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 	__asm__ __volatile__("sti");
 	
 	//setupLapic(&smp.processorList[0]);
-
-	listAllTables();
 	anykey();
+
+	list_all_tables();
+
+
+
+	//anykey();
+
+	pci_check_all_buses();
+	anykey();
+	
+
 	
 	showMemory();
 

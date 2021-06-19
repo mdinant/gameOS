@@ -1,32 +1,59 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # GNU Make 4.2.1
+ 
 # Built for x86_64-pc-linux-gnu
+ 
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
+ 
 # License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ 
 # This is free software: you are free to change and redistribute it.
+ 
 # There is NO WARRANTY, to the extent permitted by law.
+ 
 
-# Make data base, printed on Sun Jun 13 15:35:41 2021
+ 
+# Make data base, printed on Sat Jun 19 18:22:00 2021
+ 
 
 # Variables
+ 
 
+ 
 # 'override' directive
+ 
 GNUMAKEFLAGS := 
+ 
 # automatic
+ 
 <D = $(patsubst %/,%,$(dir $<))
+ 
 # makefile (from 'Makefile', line 1)
+ 
 PREFIX = $(shell export PREFIX="$HOME/opt/cross")
+ 
 # automatic
+ 
 ?F = $(notdir $?)
+ 
 # environment
+ 
 DESKTOP_SESSION = ubuntu
+ 
 # default
+ 
 .SHELLFLAGS := -c
+ 
 # environment
+ 
 XDG_SESSION_CLASS = user
+ 
 # environment
+ 
 SNAP_COMMON = /var/snap/code/common
+ 
 # environment
+ 
 XDG_SESSION_TYPE = x11
 # environment
 VSCODE_LOG_NATIVE = false
@@ -47,13 +74,13 @@ CURDIR := /home/matthijs/projects/os/gameOS/arch/x86
 # makefile
 SHELL = /bin/sh
 # environment
-SNAP_DATA = /var/snap/code/65
+SNAP_DATA = /var/snap/code/67
 # environment
 VTE_VERSION = 6003
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:34641
+JOURNAL_STREAM = 8:35555
 # makefile (from 'Makefile', line 6)
 CFLAGS = -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include
 # environment
@@ -81,7 +108,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1019
+MANAGERPID = 1040
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -91,7 +118,7 @@ VSCODE_CWD = /home/matthijs/projects/os/gameOS/arch/x86
 # makefile (from 'Makefile', line 16)
 ISO_DIR := ./iso
 # environment
-GSETTINGS_SCHEMA_DIR = /snap/code/65/usr/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /snap/code/67/usr/share/glib-2.0/schemas
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
 # environment
@@ -99,17 +126,17 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/matthijs-ubuntu:@/tmp/.ICE-unix/1576,unix/matthijs-ubuntu:/tmp/.ICE-unix/1576
+SESSION_MANAGER = local/matthijs-ubuntu:@/tmp/.ICE-unix/1592,unix/matthijs-ubuntu:/tmp/.ICE-unix/1592
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
 GDK_PIXBUF_MODULE_FILE = /home/matthijs/snap/code/common/.cache/gdk-pixbuf-loaders.cache
 # environment
-SNAP = /snap/code/65
+SNAP = /snap/code/67
 # environment
-SNAP_VERSION = 054a9295
+SNAP_VERSION = 507ce72a
 # makefile (from 'Makefile', line 15)
-L_DIR := ./src
+L_DIR := ./kernel
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -119,15 +146,15 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=37106b6f-1ea7-47b1-a191-0d869bb98429&iid=37106b6f-1ea7-47b1-a191-0d869bb98429&sid=37106b6f-1ea7-47b1-a191-0d869bb98429","uploadToServer":true}
 # environment
-INVOCATION_ID = 8a3f8ce671ef406f999aa4c5150bc9e8
+INVOCATION_ID = 1a4e2126c2de46d1bc021a44c92b9a23
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/65/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/67/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # makefile (from 'Makefile', line 17)
 WIN_DIR := /mnt/win
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver output-sync check-symlink load
 # makefile (from 'Makefile', line 13)
-ASM_DIR := ./src
+ASM_DIR := ./kernel
 # environment
 LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
 # environment
@@ -147,7 +174,7 @@ PWD = /home/matthijs/projects/os/gameOS/arch/x86
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1541
+SSH_AGENT_PID = 1506
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -193,7 +220,7 @@ MAKECMDGOALS := all
 # environment
 QT_IM_MODULE = ibus
 # environment
-SNAP_USER_DATA = /home/matthijs/snap/code/65
+SNAP_USER_DATA = /home/matthijs/snap/code/67
 # environment
 SHLVL = 1
 # makefile (from 'Makefile', line 8)
@@ -203,15 +230,15 @@ LINKFLAGS = -ffreestanding -O2 -nostdlib
 # environment
 GNOME_SHELL_SESSION_MODE = ubuntu
 # makefile (from 'Makefile', line 11)
-BUILD_DIR := ./bin
+BUILD_DIR := ./build
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2a59d372-57d2-4d82-ad97-ae7464594f57.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-3dd51498-40e4-45dc-816b-834f394d95ea.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
 USER = matthijs
 # environment
-SNAP_REVISION = 65
+SNAP_REVISION = 67
 # environment
 LC_MONETARY = nl_NL.UTF-8
 # makefile
@@ -229,7 +256,7 @@ MAKE_COMMAND := make
 # environment
 _WSREP_START_POSITION = 
 # environment
-VSCODE_NODE_CACHED_DATA_DIR = /home/matthijs/.config/Code/CachedData/054a9295330880ed74ceaedda236253b4f39a335
+VSCODE_NODE_CACHED_DATA_DIR = /home/matthijs/.config/Code/CachedData/507ce72a4466fbb27b715c3722558bb15afa9f48
 # environment
 OLDPWD = /home/matthijs/projects/os/gameOS/arch
 # default
@@ -237,7 +264,7 @@ OLDPWD = /home/matthijs/projects/os/gameOS/arch
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-e2d1fc57-1.56.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-e2d1fc57-1.57.1-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -271,18 +298,17 @@ LC_MEASUREMENT = nl_NL.UTF-8
 # environment
 SNAP_NAME = code
 # makefile (from 'Makefile', line 14)
-C_DIR := ./src
+C_DIR := ./kernel
 # environment
 LC_ALL = C
 # environment
- 
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/244cb77a_aceb_4525_a369_1bfa611b763f
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/a2c030b7_01f4_43b3_bb65_fb7e5267595f
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.75
+GNOME_TERMINAL_SERVICE = :1.83
 # default
 SUFFIXES := 
 # environment
@@ -303,10 +329,12 @@ LC_ADDRESS = nl_NL.UTF-8
 LANG = C
 # environment
 TERM = xterm-256color
+ 
 # environment
-VSCODE_PID = 164802
+ 
+VSCODE_PID = 2846
 # variable set hash-table stats:
-# Load=147/1024=14%, Rehash=0, Collisions=25/195=13%
+# Load=147/1024=14%, Rehash=0, Collisions=25/197=13%
 
 # Pattern-specific Variable Values
 
@@ -329,8 +357,8 @@ c:
 #  Implicit rule search has not been done.
 #  File does not exist.
 #  File has not been updated.
-#  recipe to execute (from 'Makefile', line 45):
-	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main.o $(C_DIR)/main.c
+#  recipe to execute (from 'Makefile', line 49):
+	$(CC) $(CFLAGS) -o $(OBJ_DIR)/main.o -c $(C_DIR)/main.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/main_ap.o $(C_DIR)/main_ap.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/common.o $(C_DIR)/common.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/scrn.o $(C_DIR)/scrn.c
@@ -351,6 +379,7 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/apic.o $(C_DIR)/apic.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/pci.o $(C_DIR)/pci.c
 
 link: asm c
 #  Phony target (prerequisite of .PHONY).
@@ -359,7 +388,7 @@ link: asm c
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/23=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/25=0%
 #  recipe to execute (from 'Makefile', line 30):
 	$(CC) -T $(L_DIR)/link2.ld -o $(BUILD_DIR)/kernel.bin $(LINKFLAGS) -lgcc
 
@@ -371,7 +400,7 @@ all: iso
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/23=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/25=0%
 
 .PHONY: all iso link asm c
 #  Implicit rule search has not been done.
@@ -387,9 +416,16 @@ all: iso
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-13 12:22:50.858847409
+#  Last modified 2021-06-19 17:55:41.778896274
 #  File has been updated.
 #  Successfully updated.
+
+listing:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 46):
+	$(CC) $(CFLAGS) -S -o $(C_DIR)/kb.S $(C_DIR)/kb.c
 
 # Not a target:
 .DEFAULT:
@@ -421,7 +457,7 @@ asm:
 # automatic
 # ? := 
 # variable set hash-table stats:
-# Load=8/32=25%, Rehash=0, Collisions=1/31=3%
+# Load=8/32=25%, Rehash=0, Collisions=1/33=3%
 #  recipe to execute (from 'Makefile', line 33):
 	nasm -f elf32 $(ASM_DIR)/multiboot_header.asm -o $(OBJ_DIR)/multiboot_header.o
 	nasm -f elf32 $(ASM_DIR)/start.asm -o $(OBJ_DIR)/start.o
@@ -429,10 +465,12 @@ asm:
 	nasm -f elf32 $(ASM_DIR)/cpuid.asm -o $(OBJ_DIR)/cpuid.o
 	nasm -f elf32 $(ASM_DIR)/memasm.asm -o $(OBJ_DIR)/memasm.o
 	nasm -f elf32 $(ASM_DIR)/ap_boot.asm -o $(OBJ_DIR)/ap_boot.o
+ 
 	nasm -f elf32 $(ASM_DIR)/stack.asm -o $(OBJ_DIR)/stack.o
 	nasm -f elf32 $(ASM_DIR)/pit.asm -o $(OBJ_DIR)/pit.o
 	nasm -f elf32 $(ASM_DIR)/pic.asm -o $(OBJ_DIR)/pic.o
 	nasm -f elf32 $(ASM_DIR)/gdt.asm -o $(OBJ_DIR)/gdt_asm.o
+	nasm -f elf32 $(ASM_DIR)/io.asm -o $(OBJ_DIR)/io.o
 
 iso: link
 #  Phony target (prerequisite of .PHONY).
@@ -441,7 +479,7 @@ iso: link
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # variable set hash-table stats:
-# Load=0/32=0%, Rehash=0, Collisions=0/23=0%
+# Load=0/32=0%, Rehash=0, Collisions=0/25=0%
 #  recipe to execute (from 'Makefile', line 24):
 	$(shell rm $(ISO_DIR)/myos.iso)
 	$(shell sudo cp $(BUILD_DIR)/kernel.bin $(ISO_DIR)/boot/kernel.bin)
@@ -449,20 +487,19 @@ iso: link
 	$(shell sudo cp $(ISO_DIR)/myos.iso $(WIN_DIR)/myos.iso)
 
 # files hash-table stats:
-# Load=9/1024=1%, Rehash=0, Collisions=0/34=0%
+# Load=10/1024=1%, Rehash=0, Collisions=0/35=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 129 B / avg = 6 B
-# current buf: size = 8162 B / used = 129 B / count = 19 / avg = 6 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 137 B / avg = 6 B
+# current buf: size = 8162 B / used = 137 B / count = 20 / avg = 6 B
 
-# strcache performance: lookups = 41 / hit rate = 53%
+# strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
- 
-# Load=19/8192=0%, Rehash=0, Collisions=1/41=2%
-# Finished Make data base on Sun Jun 13 15:35:41 2021
+# Load=20/8192=0%, Rehash=0, Collisions=1/43=2%
+# Finished Make data base on Sat Jun 19 18:22:00 2021
 
  

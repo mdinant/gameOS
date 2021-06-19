@@ -58,10 +58,10 @@ void move_csr(void)
     *  learn more, you should look up some VGA specific
     *  programming documents. A great start to graphics:
     *  http://www.brackeen.com/home/vga */
-	outportb(0x3D4, 14);
-	outportb(0x3D5, temp >> 8);
-	outportb(0x3D4, 15);
-	outportb(0x3D5, temp);
+	outpb(0x3D4, 14);
+	outpb(0x3D5, temp >> 8);
+	outpb(0x3D4, 15);
+	outpb(0x3D5, temp);
 }
 
 /* Clears the screen */

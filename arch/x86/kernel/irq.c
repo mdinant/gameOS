@@ -56,16 +56,16 @@ void irq_uninstall_handler(int irq)
 *  47 */
 void irq_remap(void)
 {
-    outportb(0x20, 0x11);
-    outportb(0xA0, 0x11);
-    outportb(0x21, 0x20);
-    outportb(0xA1, 0x28);
-    outportb(0x21, 0x04);
-    outportb(0xA1, 0x02);
-    outportb(0x21, 0x01);
-    outportb(0xA1, 0x01);
-    outportb(0x21, 0x0);
-    outportb(0xA1, 0x0);
+    outpb(0x20, 0x11);
+    outpb(0xA0, 0x11);
+    outpb(0x21, 0x20);
+    outpb(0xA1, 0x28);
+    outpb(0x21, 0x04);
+    outpb(0xA1, 0x02);
+    outpb(0x21, 0x01);
+    outpb(0xA1, 0x01);
+    outpb(0x21, 0x0);
+    outpb(0xA1, 0x0);
 }
 
 /* We first remap the interrupt controllers, and then we install
@@ -131,12 +131,12 @@ void pic_irq_handler(struct regs *r)
     *  the slave controller */
     if (r->int_no >= 40)
     {
-        outportb(0xA0, 0x20);
+        outpb(0xA0, 0x20);
     }
 
     /* In either case, we need to send an EOI to the master
     *  interrupt controller too */
-    outportb(0x20, 0x20);
+    outpb(0x20, 0x20);
 }
 
 void apic_irq_handler(struct regs *r)

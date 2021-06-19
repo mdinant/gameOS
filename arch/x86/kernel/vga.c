@@ -52,7 +52,7 @@
 #define CRTC_DATA           0x03d5
 
 /* macro to write a word to a port */
-#define word_out(port,register,value) outportw(port,(((word)value<<8) + register))
+#define word_out(port,register,value) outpw(port,(((word)value<<8) + register))
 
 
 //#define VERTICAL_RETRACE
@@ -130,7 +130,7 @@ void set_unchained_mode(int width, int height)
     word_out(CRTC_INDEX, V_RETRACE_END, 0x2c);
 
 //    outp(MISC_OUTPUT, 0xe7);
-    outportb(MISC_OUTPUT, 0xe7);
+    outpb(MISC_OUTPUT, 0xe7);
     word_out(CRTC_INDEX, H_TOTAL, 0x6b);
     word_out(CRTC_INDEX, H_DISPLAY_END, 0x59);
     word_out(CRTC_INDEX, H_BLANK_START, 0x5a);
@@ -147,7 +147,7 @@ void set_unchained_mode(int width, int height)
   else
   {
 //    outp(MISC_OUTPUT, 0xe3);
-	  outportb(MISC_OUTPUT, 0xe3);
+	  outpb(MISC_OUTPUT, 0xe3);
   }
 
   if (height==240 || height==480)
@@ -186,26 +186,26 @@ void set_unchained_mode2(int width, int height)
 
   dword *ptr=(dword *)VGA;            /* used for faster screen clearing */
 
-  outportb(SC_INDEX,  MEMORY_MODE);       /* turn off chain-4 mode */
-  outportb(SC_DATA,   0x06);
+  outpb(SC_INDEX,  MEMORY_MODE);       /* turn off chain-4 mode */
+  outpb(SC_DATA,   0x06);
 
-  outportw(SC_INDEX, ALL_PLANES);        /* set map mask to all 4 planes */
+  outpw(SC_INDEX, ALL_PLANES);        /* set map mask to all 4 planes */
 
   for(i=0;i<0x4000;i++)               /* clear all 256K of memory */
     *ptr++ = 0;
 
-  outportb(CRTC_INDEX,UNDERLINE_LOCATION);/* turn off long mode */
-  outportb(CRTC_DATA, 0x00);
+  outpb(CRTC_INDEX,UNDERLINE_LOCATION);/* turn off long mode */
+  outpb(CRTC_DATA, 0x00);
 
-  outportb(CRTC_INDEX,MODE_CONTROL);      /* turn on byte mode */
-  outportb(CRTC_DATA, 0xe3);
+  outpb(CRTC_INDEX,MODE_CONTROL);      /* turn on byte mode */
+  outpb(CRTC_DATA, 0xe3);
 	
 	
 	
 	// TEST STUFF, ME, REMOVE FROM HERE
   screen_width=320;
   screen_height=200;
-	outportb(MISC_OUTPUT, 0xe3);
+	outpb(MISC_OUTPUT, 0xe3);
 
 	
   if (height==240 || height==480)
@@ -231,10 +231,10 @@ void set_palette(const byte *palette)
 {
   int i;
 
-  outportb(PALETTE_INDEX,0);              /* tell the VGA that palette data
+  outpb(PALETTE_INDEX,0);              /* tell the VGA that palette data
                                          is coming. */
   for(i=0;i<256*3;i++)
-    outportb(PALETTE_DATA,palette[i]);    /* write the data */
+    outpb(PALETTE_DATA,palette[i]);    /* write the data */
 }
 
 
@@ -279,8 +279,8 @@ void put_pixel(int x,int y,byte color)
 #endif
 
 /* flipping */
-  outportb(SC_INDEX, MAP_MASK);          /* select plane */
-  outportb(SC_DATA,  1 << (x&3) );
+  outpb(SC_INDEX, MAP_MASK);          /* select plane */
+  outpb(SC_DATA,  1 << (x&3) );
 
   VGA[(y<<6)+(y<<4)+(x>>2)]=color;
 
@@ -354,9 +354,9 @@ void line(int x1, int y1, int x2, int y2, byte color)
 void wait_for_retrace(void)
 {
     /* wait until done with vertical retrace */
-    while  ((inportb(INPUT_STATUS) & VRETRACE)) {};
+    while  ((inpb(INPUT_STATUS) & VRETRACE)) {};
     /* wait until done refreshing */
-    while (!(inportb(INPUT_STATUS) & VRETRACE)) {};
+    while (!(inpb(INPUT_STATUS) & VRETRACE)) {};
 }
 
 void swap_vga_buffer(void)
@@ -382,7 +382,7 @@ void swap_vga_buffer(void)
 	int plane;
       for(plane=0;plane<4;plane++)
       {
-        outportb(SC_DATA,  1 << ((plane)&3) );
+        outpb(SC_DATA,  1 << ((plane)&3) );
 		  
 		  
 		memcpy(VGA,screen[plane],SCREEN_SIZE/4); // SCREEN_SIZE
@@ -408,8 +408,8 @@ void flip_screen()
   #ifdef VERTICAL_RETRACE
     while ((inportb(INPUT_STATUS_1) & DISPLAY_ENABLE));
   #endif
-  outportw(CRTC_INDEX, high_address);
-  outportw(CRTC_INDEX, low_address);
+  outpw(CRTC_INDEX, high_address);
+  outpw(CRTC_INDEX, low_address);
   #ifdef VERTICAL_RETRACE
     while (!(inportb(INPUT_STATUS_1) & VRETRACE));
   #endif

@@ -13,7 +13,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
  
 
  
-# Make data base, printed on Sat Jun 19 18:22:00 2021
+# Make data base, printed on Sun Jun 20 12:55:29 2021
  
 
 # Variables
@@ -27,33 +27,19 @@ GNUMAKEFLAGS :=
 # automatic
  
 <D = $(patsubst %/,%,$(dir $<))
- 
 # makefile (from 'Makefile', line 1)
- 
 PREFIX = $(shell export PREFIX="$HOME/opt/cross")
- 
 # automatic
- 
 ?F = $(notdir $?)
- 
 # environment
- 
 DESKTOP_SESSION = ubuntu
- 
 # default
- 
 .SHELLFLAGS := -c
- 
 # environment
- 
 XDG_SESSION_CLASS = user
- 
 # environment
- 
 SNAP_COMMON = /var/snap/code/common
- 
 # environment
- 
 XDG_SESSION_TYPE = x11
 # environment
 VSCODE_LOG_NATIVE = false
@@ -80,7 +66,7 @@ VTE_VERSION = 6003
 # environment
 VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
 # environment
-JOURNAL_STREAM = 8:35555
+JOURNAL_STREAM = 8:35623
 # makefile (from 'Makefile', line 6)
 CFLAGS = -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include
 # environment
@@ -108,7 +94,7 @@ DBUS_SESSION_BUS_ADDRESS = unix:path=/run/user/1000/bus
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-MANAGERPID = 1040
+MANAGERPID = 1052
 # environment
 LESSOPEN = | /usr/bin/lesspipe %s
 # environment
@@ -126,7 +112,7 @@ PATH = /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/matthijs-ubuntu:@/tmp/.ICE-unix/1592,unix/matthijs-ubuntu:/tmp/.ICE-unix/1592
+SESSION_MANAGER = local/matthijs-ubuntu:@/tmp/.ICE-unix/1568,unix/matthijs-ubuntu:/tmp/.ICE-unix/1568
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -146,7 +132,7 @@ DISABLE_WAYLAND = 1
 # environment
 VSCODE_CRASH_REPORTER_START_OPTIONS = {"companyName":"Microsoft","productName":"VSCode","submitURL":"appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=37106b6f-1ea7-47b1-a191-0d869bb98429&iid=37106b6f-1ea7-47b1-a191-0d869bb98429&sid=37106b6f-1ea7-47b1-a191-0d869bb98429","uploadToServer":true}
 # environment
-INVOCATION_ID = 1a4e2126c2de46d1bc021a44c92b9a23
+INVOCATION_ID = 9b3d624f15874f71917ce8a37a84083f
 # environment
 GDK_PIXBUF_MODULEDIR = /snap/code/67/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # makefile (from 'Makefile', line 17)
@@ -174,7 +160,7 @@ PWD = /home/matthijs/projects/os/gameOS/arch/x86
 # default
 .LOADED := 
 # environment
-SSH_AGENT_PID = 1506
+SSH_AGENT_PID = 1533
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = ubuntu:GNOME
 # environment
@@ -232,7 +218,7 @@ GNOME_SHELL_SESSION_MODE = ubuntu
 # makefile (from 'Makefile', line 11)
 BUILD_DIR := ./build
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-3dd51498-40e4-45dc-816b-834f394d95ea.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-c5380a89-45f3-4eb0-a317-2e38f2aecb49.sock
 # default
 MAKE_VERSION := 4.2.1
 # environment
@@ -258,7 +244,7 @@ _WSREP_START_POSITION =
 # environment
 VSCODE_NODE_CACHED_DATA_DIR = /home/matthijs/.config/Code/CachedData/507ce72a4466fbb27b715c3722558bb15afa9f48
 # environment
-OLDPWD = /home/matthijs/projects/os/gameOS/arch
+OLDPWD = /home/matthijs/projects
 # default
 .VARIABLES := 
 # automatic
@@ -304,17 +290,18 @@ LC_ALL = C
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/a2c030b7_01f4_43b3_bb65_fb7e5267595f
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/2b122208_3ba7_4080_8318_2b2a72265d23
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.83
+GNOME_TERMINAL_SERVICE = :1.87
 # default
 SUFFIXES := 
 # environment
 SNAP_REEXEC = 
 # environment
 CHROME_DESKTOP = code-url-handler.desktop
+ 
 # environment
 WINDOWPATH = 2
 # default
@@ -329,10 +316,8 @@ LC_ADDRESS = nl_NL.UTF-8
 LANG = C
 # environment
 TERM = xterm-256color
- 
 # environment
- 
-VSCODE_PID = 2846
+VSCODE_PID = 2927
 # variable set hash-table stats:
 # Load=147/1024=14%, Rehash=0, Collisions=25/197=13%
 
@@ -465,7 +450,6 @@ asm:
 	nasm -f elf32 $(ASM_DIR)/cpuid.asm -o $(OBJ_DIR)/cpuid.o
 	nasm -f elf32 $(ASM_DIR)/memasm.asm -o $(OBJ_DIR)/memasm.o
 	nasm -f elf32 $(ASM_DIR)/ap_boot.asm -o $(OBJ_DIR)/ap_boot.o
- 
 	nasm -f elf32 $(ASM_DIR)/stack.asm -o $(OBJ_DIR)/stack.o
 	nasm -f elf32 $(ASM_DIR)/pit.asm -o $(OBJ_DIR)/pit.o
 	nasm -f elf32 $(ASM_DIR)/pic.asm -o $(OBJ_DIR)/pic.o
@@ -500,6 +484,6 @@ iso: link
 # strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=1/43=2%
-# Finished Make data base on Sat Jun 19 18:22:00 2021
+# Finished Make data base on Sun Jun 20 12:55:29 2021
 
  

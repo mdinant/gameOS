@@ -10,6 +10,32 @@
 #define SUBCLASS_OFFSET 10
 #define CLASS_CODE_OFFSET 11
 
+static char *classnames[] = {
+    "Unclassified",
+    "Mass Storage Controller",
+    "Network Controller",
+    "Display Controller",
+    "Multimedia Controller",
+    "Memory Controller",
+    "Bridge Device",
+    "Simple Communication Controller",
+    "Base System Peripheral",
+    "Input Device Controller",
+    "Docking Station",
+    "Processor",
+    "Serial Bus Controller",
+    "Wireless Controller",
+    "Intelligent Controller",
+    "Satellite Communication Controller",
+    "Encryption Controller",
+    "Signal Processing Controller",
+    "Processing Accelerator",
+    "Non-Essential Instrumentation",
+    "Reserved",
+    "Co-Processor",
+    "Reserved",
+    "Unassigned Class"};
+
 bool check_pci()
 {
     regs32_t regs;
@@ -121,14 +147,59 @@ uint32_t pci_config_read_reg(uint32_t bus, uint32_t slot, uint32_t func, uint8_t
 //     }
 // }
 
+void parseDevice(uint32_t bus, uint32_t slot, uint32_t func, bool *multifunction)
+{
+    *multifunction = FALSE;
+    uint32_t reg = pci_config_read_reg(bus, slot, func, 0);
+
+    // char hex[8];
+    // memset(hex, 0, 8);
+    // hex_to_char(reg, hex);
+    uint16_t vendorId = reg;
+    if (vendorId == 0xFFFF)
+        return; // BAD device
+    uint16_t deviceId = reg >> 16;
+
+    reg = pci_config_read_reg(bus, slot, func, 8);
+    uint8_t class = reg >> 24;
+    uint8_t subclass = reg >> 16;
+    uint8_t progIf = reg >> 8;
+
+    if ((class == 0x0C) && (subclass == 0x03))
+    {
+        printf ("USB type: %u\n", progIf);
+    }
+
+    reg = pci_config_read_reg(bus, slot, func, 12);
+    uint8_t headerType = reg >> 16;
+    //printf("Vendor ID: %u\n", vendorId);
+    //printf("Device ID: %u\n", deviceId);
+    printf("device: %u class: %s subclass: %u function: %u\n", slot, classnames[class], subclass, func);
+    if ((headerType & 0x01) != 0)
+    {
+        printf("\tPCI to PCI bridge\n");
+        reg = pci_config_read_reg(bus, slot, func, 24);
+        uint8_t secbus = reg >> 8;
+        printf("\tsecundary bus: %u\n", secbus);
+    }
+    else if ((headerType & 0x02) != 0)
+        printf("\tCardBus bridge");
+    if ((headerType & 0x80) != 0)
+    {
+        *multifunction = TRUE;
+    }
+    printf("------------\n");
+}
+
 void pci_check_all_buses(void)
 {
+
     uint32_t bus;
     uint32_t device;
 
+        cls();
     for (bus = 0; bus < 5; bus++)
     {
-        cls();
         printf("\n... PCI ... busnum: %u\n", bus);
         for (device = 0; device < 50; device++)
         {
@@ -139,28 +210,21 @@ void pci_check_all_buses(void)
 
             // uint8_t classCode = pci_config_read_byte(bus, device, 0, CLASS_CODE_OFFSET);
             // uint8_t subclass = pci_config_read_byte(bus, device, 0, SUBCLASS_OFFSET);
-
-            uint32_t reg = pci_config_read_reg(bus, device, 0, 0);
-
-            // char hex[8];
-            // memset(hex, 0, 8);
-            // hex_to_char(reg, hex);
-            uint16_t vendorId = reg;
-            if (vendorId == 0xFFFF)
-                continue;
-            uint16_t deviceId = reg >> 16;
-
-            reg = pci_config_read_reg(bus, device, 0, 8);
-            uint8_t class = reg >> 24;
-            uint8_t subclass = reg >> 16;
-            printf("Vendor ID: %u\n", vendorId);
-            printf("Device ID: %u\n", deviceId);
-            printf("class: %u subclass: %u\n", class, subclass);
-
-            printf("------------\n");
-             if (device % 5 == 0)
-                anykey();
-       }
-        anykey();
+            bool multifunction;
+            parseDevice(bus, device, 0, &multifunction);
+            if (multifunction == TRUE)
+            {
+                // already done 0, start with 1
+                for (uint32_t i = 1; i < 8; i++)
+                {
+                    // TODO: multifunction is now dummy
+                    parseDevice(bus, device, i, &multifunction);
+                }
+            }
+            // pretty print
+            if ((device % 5 == 0) && (device > 0))
+               anykey();
+        }
+       // anykey();
     }
 }

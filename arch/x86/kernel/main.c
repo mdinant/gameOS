@@ -34,26 +34,36 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 	}
 	apic_irq_install(smp.processorList[0].idt);
 	__asm__ __volatile__("sti");
-	
+
 	//setupLapic(&smp.processorList[0]);
-	anykey();
+	//anykey();
 
-	list_all_tables();
-
-
+	if (init_serial() == FALSE)
+	{
+		perror("no serial\n");
+	}
+	else
+	{
+		printf("yes serial\n");
+	}
+	//anykey();
+	//list_all_tables();
 
 	//anykey();
 
-	pci_check_all_buses();
-	anykey();
+	//pci_check_all_buses();
+	//anykey();
+
+	showMemory();
+
+	// test bios file io on usb
 	
 
-	
-	showMemory();
 
 	//init_cpu();
 
-	if (init_vbe() == FALSE) {
+	if (init_vbe() == FALSE)
+	{
 		return;
 	}
 
@@ -62,5 +72,5 @@ void _main(multiboot_info_t *mbt, unsigned long magic)
 halt:
 	for (;;)
 		; // or halt
-		// next station is a jmp $ in asm
+			// next station is a jmp $ in asm
 }

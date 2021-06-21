@@ -68,3 +68,4 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/pci.o $(C_DIR)/pci.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/com.o $(C_DIR)/com.c

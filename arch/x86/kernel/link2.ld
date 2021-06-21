@@ -46,6 +46,7 @@ SECTIONS
 		hpet.o(.text)
 		pci.o(.text)
 		io.o(.text)
+		com.o(.text)
         _boot_end = .;
         . = ALIGN(4096);
         _ap_start = .;

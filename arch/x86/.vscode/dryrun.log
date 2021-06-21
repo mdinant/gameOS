@@ -1,6 +1,8 @@
-make --dry-run --always-make --keep-going --print-directory
+make --dry-run --keep-going --print-directory
 make: Entering directory '/home/matthijs/projects/os/gameOS/arch/x86'
+ 
 nasm -f elf32 ./kernel/multiboot_header.asm -o ./obj/multiboot_header.o
+ 
 nasm -f elf32 ./kernel/start.asm -o ./obj/start.o
 nasm -f elf32 ./kernel/int32_beta.asm -o ./obj/int32_beta.o
 nasm -f elf32 ./kernel/cpuid.asm -o ./obj/cpuid.o
@@ -33,29 +35,45 @@ $HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -f
 $HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/acpi.o ./kernel/acpi.c
 $HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/hpet.o ./kernel/hpet.c
 $HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/pci.o ./kernel/pci.c
+$HOME/opt/cross/bin/i686-elf-gcc -Wall -fstrength-reduce -fomit-frame-pointer -fno-asynchronous-unwind-tables -finline-functions -nostdinc -fno-builtin -fno-stack-protector -I./include -c -o ./obj/com.o ./kernel/com.c
 $HOME/opt/cross/bin/i686-elf-gcc -T ./kernel/link2.ld -o ./build/kernel.bin -ffreestanding -O2 -nostdlib -lgcc
  
-sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo 
+: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
  
 GNU xorriso 1.5.4.pl02 : RockRidge filesystem manipulator, libburnia project.
 
+ 
 Drive current: -outdev 'stdio:./iso/myos.iso'
+ 
 Media current: stdio file, overwriteable
+ 
 Media status : is blank
+ 
 Media summary: 0 sessions, 0 data blocks, 0 data,  358g free
-Added to ISO image: directory '/'='/tmp/grub.wkI8bR'
+ 
+Added to ISO image: directory '/'='/tmp/grub.cOb8b4'
+ 
 xorriso : UPDATE :     290 files added in 1 seconds
+ 
 Added to ISO image: directory '/'='/home/matthijs/projects/os/gameOS/arch/x86/iso'
+ 
 xorriso : UPDATE :     294 files added in 1 seconds
+ 
 xorriso : NOTE : Copying to System Area: 512 bytes from file '/usr/lib/grub/i386-pc/boot_hybrid.img'
-xorriso : UPDATE :  81.87% done
+ 
+xorriso : UPDATE :  64.68% done
  
 ISO image produced: 2653 sectors
 Written to medium : 2653 sectors at LBA 0
+ 
 Writing to 'stdio:./iso/myos.iso' completed successfully.
 
  
-sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo 
+:  
+a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper 
+
  
 make: Leaving directory '/home/matthijs/projects/os/gameOS/arch/x86'
  

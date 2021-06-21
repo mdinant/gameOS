@@ -158,7 +158,6 @@ void parseDevice(uint32_t bus, uint32_t slot, uint32_t func, bool *multifunction
     uint16_t vendorId = reg;
     if (vendorId == 0xFFFF)
         return; // BAD device
-    uint16_t deviceId = reg >> 16;
 
     reg = pci_config_read_reg(bus, slot, func, 8);
     uint8_t class = reg >> 24;
@@ -222,8 +221,8 @@ void pci_check_all_buses(void)
                 }
             }
             // pretty print
-            if ((device % 5 == 0) && (device > 0))
-               anykey();
+            // if ((device % 5 == 0) && (device > 0))
+            //    anykey();
         }
        // anykey();
     }

@@ -13,7 +13,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
  
 
  
-# Make data base, printed on Sun Jun 20 12:55:29 2021
+# Make data base, printed on Sun Jun 20 20:14:18 2021
  
 
 # Variables
@@ -303,6 +303,7 @@ SNAP_REEXEC =
 CHROME_DESKTOP = code-url-handler.desktop
  
 # environment
+ 
 WINDOWPATH = 2
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
@@ -365,6 +366,7 @@ c:
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/acpi.o $(C_DIR)/acpi.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/hpet.o $(C_DIR)/hpet.c
 	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/pci.o $(C_DIR)/pci.c
+	$(CC) $(CFLAGS) -c -o $(OBJ_DIR)/com.o $(C_DIR)/com.c
 
 link: asm c
 #  Phony target (prerequisite of .PHONY).
@@ -401,7 +403,7 @@ all: iso
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2021-06-19 17:55:41.778896274
+#  Last modified 2021-06-20 20:14:07.336734397
 #  File has been updated.
 #  Successfully updated.
 
@@ -484,6 +486,6 @@ iso: link
 # strcache performance: lookups = 43 / hit rate = 53%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=1/43=2%
-# Finished Make data base on Sun Jun 20 12:55:29 2021
+# Finished Make data base on Sun Jun 20 20:14:18 2021
 
  

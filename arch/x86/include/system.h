@@ -204,8 +204,8 @@ bool check_cpu();
 /* mptable.c */
 bool check_mp_table();
 
-/* acpi.c */
-
+/* com.c */
+bool init_serial();
 
 void _main_ap();
 
